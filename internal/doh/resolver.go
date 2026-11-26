@@ -24,7 +24,7 @@ type Resolver struct {
 
 // New validates an HTTPS resolver endpoint. A nil client uses http.DefaultClient.
 func New(endpoint string, client *http.Client) (*Resolver, error) {
-	parsed, err := url.ParseRequestURI(endpoint)
+	parsed, err := url.Parse(endpoint)
 	if err != nil {
 		return nil, fmt.Errorf("parse DoH endpoint: %w", err)
 	}
