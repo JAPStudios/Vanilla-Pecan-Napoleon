@@ -19,7 +19,7 @@ The validator accepts standard WireGuard interface and peer fields. It rejects d
 
 ## Upstream source review
 
-Potential upstream components are evaluated individually. No upstream repository is modified by this project. Mullvad's wireguard-go is now pinned as a Go module dependency at revision 86ccb9b49b8f095775109b62554efedbc1d0e3c6 after reviewing its MIT license, module requirements and device/UAPI interfaces. Its notice is recorded in THIRD_PARTY_NOTICES.md. Other components remain subject to individual license, dependency, platform-support and security review before integration. Upstream projects remain separately maintained.
+Potential upstream components are evaluated individually. No upstream repository is modified by this project. Mullvad's wireguard-go is now pinned as a Go module dependency at revision 86ccb9b49b8f095775109b62554efedbc1d0e3c6 after reviewing its MIT license, module requirements and device/UAPI interfaces. Its notice is recorded in THIRD_PARTY_NOTICES.md. CI resolves the pinned Go module dependencies before running tests. Other components remain subject to individual license, dependency, platform-support and security review before integration. Upstream projects remain separately maintained.
 
 Initial candidate areas:
 - WireGuard tunnel implementation and platform adapters.
