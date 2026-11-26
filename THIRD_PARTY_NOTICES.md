@@ -8,8 +8,8 @@
 - Module: golang.zx2c4.com/wireguard
 - Copyright: Copyright (C) 2017-2023 WireGuard LLC. All Rights Reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
@@ -25,3 +25,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## Windscribe ctrld DoH resolver reference
+
+- Source reviewed: https://github.com/Windscribe/ctrld/blob/main/doh.go
+- License: MIT
+- Copyright: Copyright (c) 2022 Control D Inc
+- Use in this repository: the DoH transport was independently implemented using Go's standard library and the RFC 8484 DNS wire-message media type. No ctrld source file was copied or vendored.
+- The upstream source is acknowledged as a technical reference; its provider-specific headers, endpoint defaults, client identification, telemetry and service-management code are not used.

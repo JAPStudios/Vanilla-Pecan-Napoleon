@@ -10,7 +10,11 @@ The project provides a WireGuard configuration parser and validator. It checks i
 
 The project also includes an adapter around Mullvad's MIT-licensed wireguard-go device engine. The adapter accepts a caller-supplied platform TUN device and bind, translates validated configuration to WireGuard's UAPI, and starts or closes the engine. The pinned module revision and dependency checksums are committed in go.mod and go.sum.
 
-The adapter does not create platform TUN devices, configure operating-system addresses or routes, provision accounts, operate gateways or claim production security.
+A platform startup helper creates a native WireGuard TUN device on Linux, macOS and Windows and starts the engine with the platform default bind. Address assignment, operating-system routes, DNS settings and platform permissions remain separate responsibilities.
+
+The new internal DoH transport sends DNS wire-format messages to a configured HTTPS resolver using RFC 8484 POST requests. It validates the endpoint, request and response sizes, HTTP status and response media type. It does not select or hard-code a DNS provider, send device identifiers, change system DNS settings or log DNS queries. Its design was informed by source review of Windscribe's MIT-licensed ctrld resolver; no ctrld source files are copied or vendored.
+
+The adapter does not provision accounts, operate gateways or claim production security.
 
 ## Validate a configuration
 
@@ -37,4 +41,4 @@ Home Assistant DNS add-ons are not part of the VPN core merely because they appe
 
 ## Security status
 
-This repository is an early development foundation. The validator and engine adapter are not a complete VPN client or server and must not be represented as a deployed or independently audited security product.
+This repository is an early development foundation. The validator, WireGuard engine adapter, native TUN startup and DoH transport are not a complete VPN client or server and must not be represented as a deployed or independently audited security product.
