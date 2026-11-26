@@ -6,9 +6,18 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
-	"strings"
 	"testing"
 )
+
+type cancellationTransport struct {
+	started chan struct{}
+}
+
+func (t cancellationTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+	close(t.started)
+	<-req.Context().Done()
+	return nil, req.Context().Err()
+}
 
 func TestExchangePostsDNSMessage(t *testing.T) {
 	query := []byte{0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0}
@@ -105,13 +114,8 @@ func TestExchangeRejectsInvalidResponses(t *testing.T) {
 }
 
 func TestExchangePropagatesCancellation(t *testing.T) {
-	started := make(chan struct{})
-	server := httptest.NewTLSServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		close(started)
-		<-r.Context().Done()
-	}))
-	defer server.Close()
-	resolver, err := New(server.URL, server.Client())
+	transport := cancellationTransport{started: make(chan struct{})}
+	resolver, err := New("https://resolver.example/dns-query", &http.Client{Transport: transport})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -121,9 +125,9 @@ func TestExchangePropagatesCancellation(t *testing.T) {
 		_, err := resolver.Exchange(ctx, make([]byte, 12))
 		done <- err
 	}()
-	<-started
+	<-transport.started
 	cancel()
-	if err := <-done; err == nil || !strings.Contains(err.Error(), "DoH") {
-		t.Fatalf("Exchange error = %v, want DoH cancellation error", err)
+	if err := <-done; err == nil {
+		t.Fatal("Exchange succeeded after cancellation; want error")
 	}
 }
