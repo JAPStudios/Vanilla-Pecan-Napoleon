@@ -208,10 +208,15 @@ func Parse(r io.Reader) (*Config, error) {
 	if len(cfg.Peers) == 0 {
 		return nil, fmt.Errorf("configuration requires at least one Peer section")
 	}
+	seenPeerKeys := make(map[string]int, len(cfg.Peers))
 	for i, p := range cfg.Peers {
 		if p.PublicKey == "" || len(p.AllowedIPs) == 0 {
 			return nil, fmt.Errorf("Peer %d requires PublicKey and AllowedIPs", i+1)
 		}
+		if previous, exists := seenPeerKeys[p.PublicKey]; exists {
+			return nil, fmt.Errorf("Peer %d duplicates the public key from Peer %d", i+1, previous)
+		}
+		seenPeerKeys[p.PublicKey] = i + 1
 	}
 	return cfg, nil
 }

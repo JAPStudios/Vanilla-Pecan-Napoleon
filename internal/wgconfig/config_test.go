@@ -51,3 +51,10 @@ func TestRejectsInvalidEndpoint(t *testing.T) {
 		t.Fatal("expected invalid endpoint error")
 	}
 }
+
+func TestRejectsDuplicatePeerPublicKey(t *testing.T) {
+	input := goodConfig + "\n[Peer]\nPublicKey = AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=\nAllowedIPs = 192.0.2.0/24\n"
+	if _, err := Parse(strings.NewReader(input)); err == nil {
+		t.Fatal("expected duplicate peer public key error")
+	}
+}
