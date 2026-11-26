@@ -6,7 +6,7 @@ This repository is the implementation project, not the VPN network itself. A pro
 
 ## Current implementation
 
-The initial code provides a WireGuard configuration parser and validator. It checks interface and peer configuration without printing private or preshared keys. It does not yet establish tunnels, provision accounts, operate gateways or claim production security.
+The initial implementation provides a WireGuard configuration parser and validator. It checks interface and peer configuration without printing private or preshared keys. The development branch also adds an adapter around Mullvad's MIT-licensed wireguard-go device engine. The adapter accepts a caller-supplied platform TUN device and bind, translates validated configuration to WireGuard's UAPI, and starts or closes the engine. It does not create platform TUN devices, configure operating-system addresses or routes, provision accounts, operate gateways or claim production security.
 
 ## Validate a configuration
 
@@ -19,7 +19,7 @@ The validator accepts standard WireGuard interface and peer fields. It rejects d
 
 ## Upstream source review
 
-Potential upstream components are being evaluated individually. No upstream repository is modified by this project, and no source code is imported until its exact license, notices, dependencies, platform support and security implications have been reviewed. Upstream projects remain separately maintained.
+Potential upstream components are evaluated individually. No upstream repository is modified by this project. Mullvad's wireguard-go is now pinned as a Go module dependency at revision 86ccb9b49b8f095775109b62554efedbc1d0e3c6 after reviewing its MIT license, module requirements and device/UAPI interfaces. Its notice is recorded in THIRD_PARTY_NOTICES.md. CI resolves the pinned Go module dependencies before running tests. Other components remain subject to individual license, dependency, platform-support and security review before integration. Upstream projects remain separately maintained.
 
 Initial candidate areas:
 - WireGuard tunnel implementation and platform adapters.
